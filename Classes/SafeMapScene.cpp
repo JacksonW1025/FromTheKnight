@@ -47,7 +47,6 @@ bool SafeMap::init()
 	//create the third layer for the knight and the portal
 	auto* portal_pic = Sprite::create("portal3.png");
 	auto layer_Knight = Knight::create();
-	layer_Knight->set_status();
 	layer_Knight->_Knight->setPosition(visibleSize.width / 2, visibleSize.height / 2-180);
 	portal_pic->setPosition(visibleSize.width / 2, visibleSize.height - 150);
 	layer_Knight->bindSprite(portal_pic);
@@ -57,10 +56,65 @@ bool SafeMap::init()
 	this->addChild(layer_bg);
 	this->addChild(layer_Knight);
 	
+	/*add the UI of Knight's status and the exit button*/
+	auto UI_status = cocostudio::GUIReader::getInstance()->widgetFromJsonFile("UI_status.ExportJson");
+	UI_status->setAnchorPoint(Vec2(0, 0.5));
+	UI_status->setPosition(Vec2(0, visibleSize.height * 0.8));
+	this->addChild(UI_status);
+	
+	/*load the UI	*/
+	Button* exitBtn = (Button*)Helper::seekWidgetByName(UI_status, "exitBtn");
+	exitBtn->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type) {
+		switch (type)
+		{
+			case ui::Widget::TouchEventType::BEGAN:
+				break;
+			case ui::Widget::TouchEventType::ENDED:
+				Director::getInstance()->end();
+				break;
+			default:
+				break;
+		}
+		});
+
+	Button* pauseBtn = (Button*)Helper::seekWidgetByName(UI_status, "pauseBtn");
+	pauseBtn->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type) {
+		switch (type)
+		{
+			case ui::Widget::TouchEventType::BEGAN:
+				break;
+			case ui::Widget::TouchEventType::ENDED:
+				Director::getInstance()->pushScene(StopSC::createScene());
+				break;
+			default:
+				break;
+		}
+		});
+
+	HPlable = (Text*)Helper::seekWidgetByName(UI_status, "HPlable");
+	AMlable = (Text*)Helper::seekWidgetByName(UI_status, "AMlable");
+	MPlable = (Text*)Helper::seekWidgetByName(UI_status, "MPlable");
+	HPbar = (LoadingBar*)Helper::seekWidgetByName(UI_status, "HPbarImg");
+	AMbar = (LoadingBar*)Helper::seekWidgetByName(UI_status, "ARMORbarImg");
+	MPbar = (LoadingBar*)Helper::seekWidgetByName(UI_status, "MPbarImg");
+	
+	this->scheduleUpdate();
+
 	return true;
 }
-/*问题：
-1 骑士类的update函数不停调用加载ui且没有内存释放导致越来越卡
-2 战斗场景内ui的位置应如何设置为窗口固定位置
-3 在战斗过程中的受攻击函数，能量消耗，护盾自动回复函数能否进行适配*/
+
+void SafeMap::update(float delta)
+{
+	SafeMap::HP = 5;
+	SafeMap::ARMOR = 10;
+	SafeMap::MP = 100;
+
+	HPlable->setString(Value(SafeMap::HP).asString());
+	AMlable->setString(Value(SafeMap::ARMOR).asString());
+	MPlable->setString(Value(SafeMap::MP).asString());
+
+	HPbar->setPercent(HP / 5 * 100);
+	AMbar->setPercent(ARMOR / 10 * 100);
+	MPbar->setPercent(MP / 100 * 100);
+}
 
