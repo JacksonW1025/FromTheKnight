@@ -11,12 +11,14 @@ using namespace cocostudio;
 class SafeMap : public cocos2d::Layer
 {
 public:
-    static cocos2d::Scene* createScene();
-    virtual bool init();
-    void menuCloseCallback_close(cocos2d::Ref* pSender);
-    //ImageView* m_exitBtnImg;
-
-    CREATE_FUNC(SafeMap);
+	static cocos2d::Scene* createScene();
+	virtual bool init();
+	void menuCloseCallback_close(cocos2d::Ref* pSender);
+	//void update(float delta);
+	void loadUI();
+	//ImageView* m_exitBtnImg;
+	CREATE_FUNC(SafeMap);
+	
 };
 
 #endif // __HELLOWORLD_SCENE_H__
