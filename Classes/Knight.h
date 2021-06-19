@@ -1,10 +1,6 @@
 #pragma once
 #include "cocos2d.h"
 USING_NS_CC;
-#include "editor-support/cocostudio/CCSGUIReader.h"
-#include"ui/CocosGUI.h"
-using namespace cocos2d::ui;
-using namespace cocostudio;
 
 class Knight :public cocos2d::Layer
 {
@@ -23,22 +19,27 @@ public:
 	bool Knight::isinPortal(Sprite* portal);
 	void Knight::update(float dt);
 	void Knight::bindSprite(Sprite* sprite);
+	int* isbeast00;
+	int* isbeast01;
+	int* isbeast02;
+	int* isbeast03;
+	int* isbeast04;
+	int* isbeast05;
+	int* isbeast06;
+	int* isbeast07;
 	int theLastMove = 0;//记录上一个移动动作
 	int weapon = 1;//记录武器装备状态
 	int isweapon = 1;//记录是否装备武器
+	int HP_MAX = 5;
+	int HP = HP_MAX;
+	int MP = 200;
+	int CD = 16;
+	int ARMORCD = 0;
+	int ARMOR = 10;
+	int iswar = 0;
 	int direction;//判断左右朝向
-	void set_status();
 	~Knight();
 private:
 	Sprite* portal;
-	INT HP=5;
-	INT ARMOR=10;
-	INT MP=100;
-	Text* HPlable;
-	Text* AMlable;
-	Text* MPlable;
-	LoadingBar* HPbar;
-	LoadingBar* AMbar;
-	LoadingBar* MPbar;
 };
 
